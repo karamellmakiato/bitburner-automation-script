@@ -1,3 +1,4 @@
+//get all servers
 function getAllServers(ns) {
     let discovered = ["home"];
 
@@ -14,6 +15,7 @@ function getAllServers(ns) {
     return discovered;
 }
 
+//main function which lets the script target the servers of your choosing
 export async function main(ns) {
 
     let target = "rho-construction";
@@ -22,6 +24,7 @@ export async function main(ns) {
     for (let server of servers) {
       if (server === "home") continue;
 
+      //if open ports is 0, then it will check for each program that you have to try and pry open the server
       let ports = 0;
 
       if (ns.fileExists("BruteSSH.exe")) {
@@ -48,6 +51,9 @@ export async function main(ns) {
       if (ns.getServerNumPortsRequired(server) <= ports) {
           ns.nuke(server);
       }
+        /*if u finally have root access then it will run the
+        poison.js file in every server you have root access in
+        */
       if (!ns.hasRootAccess(server)) continue;
       await ns.scp("poison.js", server);
       let ramAvailable = ns.getServerMaxRam(server) - ns.getServerUsedRam(server);
